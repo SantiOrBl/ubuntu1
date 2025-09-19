@@ -108,7 +108,7 @@ def create_categoria(categoria:CategoriaCreate, session:session_dep): # type: ig
 
 @app.post("/origen/", response_model=OrigenPublic)
 def create_origen(origen:OrigenCreate, session:session_dep): # type: ignore
-    db_origen = Categoria.model_validate(origen)
+    db_origen = Origen.model_validate(origen)
     session.add(db_origen)
     session.commit()
     session.refresh(db_origen)
@@ -116,7 +116,7 @@ def create_origen(origen:OrigenCreate, session:session_dep): # type: ignore
 
 
 
-@app.get("/produtos/", response_model=list[ProductoPublic])
+@app.get("/productos/", response_model=list[ProductoPublic])
 def read_prod(
     session:session_dep,
     offset: int = 0,
@@ -137,7 +137,7 @@ def update_prod(prod_id: int, prod: ProductoUpdate, session: session_dep):
     prod_db = session.get(Producto, prod_id)
     if not prod_db:
         raise HTTPException(status_code=404,detail='No se encontro')
-    prod_data = Producto.model_dump(exclude_unset=True)
+    prod_data = prod.model_dump(exclude_unset=True)
     prod_db.sqlmodel_update(prod_data)
     session.add(prod_db)
     session.commit()
