@@ -90,60 +90,62 @@ def root():
 def on_startup():
     create_db_ant_tables()
 
-@app.post("/productos/", response_model=ProductoPublic)
-def create_hero(hero:ProductoCreate, session:session_dep):
-    prod_db = Producto.model_validate(hero)
-    session.add(prod_db)
+@app.post("/producto/", response_model=ProductoPublic)
+def create_producto(producto:ProductoCreate, session:session_dep): # type: ignore
+    db_producto = Producto.model_validate(producto)
+    session.add(db_producto)
     session.commit()
-    session.refresh(prod_db)
-    return prod_db
+    session.refresh(db_producto)
+    return db_producto
 
-@app.post("/productos/", response_model=ProductoPublic)
-def create_hero(hero:ProductoCreate, session:session_dep):
-    prod_db = Producto.model_validate(hero)
-    session.add(prod_db)
+@app.post("/categoria/", response_model=CategoriaPublic)
+def create_categoria(categoria:CategoriaCreate, session:session_dep): # type: ignore
+    db_categoria = Categoria.model_validate(categoria)
+    session.add(db_categoria)
     session.commit()
-    session.refresh(prod_db)
-    return prod_db
+    session.refresh(db_categoria)
+    return db_categoria
 
-@app.post("/productos/", response_model=ProductoPublic)
-def create_hero(hero:ProductoCreate, session:session_dep):
-    prod_db = Producto.model_validate(hero)
-    session.add(prod_db)
+@app.post("/origen/", response_model=OrigenPublic)
+def create_origen(origen:OrigenCreate, session:session_dep): # type: ignore
+    db_origen = Categoria.model_validate(origen)
+    session.add(db_origen)
     session.commit()
-    session.refresh(prod_db)
-    return prod_db
+    session.refresh(db_origen)
+    return db_origen
+
+
 
 @app.get("/produtos/", response_model=list[ProductoPublic])
-def read_heroes(
+def read_prod(
     session:session_dep,
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 100,
 ):
-    heroes = session.exec(select(Producto).offset(offset).limit(limit)).all()
-    return heroes
+    prods = session.exec(select(Producto).offset(offset).limit(limit)).all()
+    return prods
 
 @app.get("/productos/{prod_id}", response_model=ProductoPublic)
-def read_hero(prod_id: int, session: session_dep):
+def read_prod(prod_id: int, session: session_dep):
     prod = session.get(Producto,prod_id)
     if not prod:
         raise HTTPException(status_code=404,detail='No se encontro')
     return prod
 
 @app.patch("/productos/{prod_id}",response_model=ProductoPublic)
-def update_hero(prod_id: int, prod: ProductoUpdate, session: session_dep):
+def update_prod(prod_id: int, prod: ProductoUpdate, session: session_dep):
     prod_db = session.get(Producto, prod_id)
     if not prod_db:
         raise HTTPException(status_code=404,detail='No se encontro')
-    hero_data = Producto.model_dump(exclude_unset=True)
-    prod_db.sqlmodel_update(hero_data)
+    prod_data = Producto.model_dump(exclude_unset=True)
+    prod_db.sqlmodel_update(prod_data)
     session.add(prod_db)
     session.commit()
     session.refresh(prod_db)
     return prod_db
 
-@app.delete("/productos/{hero_id}")
-def delete_hero(prod_id: int, session: session_dep):
+@app.delete("/productos/{prod_id}")
+def delete_prod(prod_id: int, session: session_dep):
     prod = session.get(Producto,prod_id)
     if not prod:
         raise HTTPException(status_code=404,detail="No se encontro")
