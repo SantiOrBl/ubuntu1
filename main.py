@@ -50,7 +50,7 @@ class CategoriaBase(SQLModel):
 class Categoria(CategoriaBase, table=True):
     id_categoria: int = Field(default= None, primary_key=True)
 
-class CategoriaCreate(CategoriaBase, table=True):
+class CategoriaCreate(CategoriaBase):
     pass
 
 class CategoriaUpdate(CategoriaBase):
@@ -69,7 +69,7 @@ class OrigenBase(SQLModel):
 class Origen(OrigenBase, table=True):
     id_origen: int = Field(default= None, primary_key=True)
 
-class OrigenCreate(OrigenBase, table=True):
+class OrigenCreate(OrigenBase):
     pass
 
 class OrigenUpdate(OrigenBase):
